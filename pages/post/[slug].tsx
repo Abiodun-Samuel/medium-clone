@@ -3,12 +3,19 @@ import Header from "../../components/Header"
 import { sanityClient, urlFor } from "../../sanity"
 import { Post_One } from "../../typings";
 import PortableText from 'react-portable-text';
+import { useForm, SubmitHandler } from "react-hook-form";
 interface Props {
    post:  Post_One;
 }
+interface IFormInput{
+   _id: string;
+   name: string;
+   email:
+}
 
 export default function Post({ post }: Props) {
-   console.log(post)
+   const { register, handleSubmit, formState: { errors } } = useForm();
+
 
    return (<main>
       <Header />
@@ -42,6 +49,29 @@ export default function Post({ post }: Props) {
             }}/>
          </div>
       </article>
+
+      <hr className="max-w-lg my-5 mx-auto border border-yellow-500" />
+      
+      <form className="flex flex-col p-5 max-w-2xl mx-auto mb-10">
+         <h3 className="text-sm text-yellow-500">Enjoyed this article?</h3>
+         <h4 className="text-3xl font-bold">Leave a comment below</h4>
+         <hr className="py-3 mt-2" />
+
+         <input {...register("_id")} type="hidden" name="_id" value={post._id} />
+
+         <label htmlFor="" className="block mb-5">
+            <span className="text-gray-700">Name</span>
+            <input  className="shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring" type="text" placeholder="Enter your name" />
+         </label>
+         <label htmlFor="" className="block mb-5">
+            <span className="text-gray-700">Email</span>
+            <input  className="shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring" type="email" placeholder="Enter your email" />
+         </label>
+         <label htmlFor="" className="block mb-5">
+            <span className="text-gray-700">Comment</span>
+            <textarea className="shadow border rounded py-2 px-3 form-textarea mt-1 block w-full ring-yellow-500 outline-none focus:ring" placeholder="Enter your comments" rows={8}/>
+         </label>
+      </form>
    </main>)
 }
 
