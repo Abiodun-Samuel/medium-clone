@@ -36,3 +36,20 @@ export interface Post_One {
    };
    body: [object]
 }
+
+export interface Comment {
+   _id: string;
+   _createdAt: string;
+   _updatedAt: string;
+   _rev: string;
+   _type: string;
+   email: string;
+   post: {
+      _ref: string;
+      _type: string;
+   };
+   comment: string;
+   approved: boolean;
+   name: string;
+}
+
