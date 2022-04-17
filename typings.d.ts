@@ -24,7 +24,8 @@ export interface Post_One {
    author: {
       name: string;
       image: string;
-   }
+   };
+   comments: Comment[];
    description: string;
    mainImage: {
       asset: {
