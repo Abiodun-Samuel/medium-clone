@@ -23,17 +23,18 @@ export default async function handler(
 ) {
    const {_id, name, email, comment} = JSON.parse(req.body)
    try {
-      await client.create({
-         _type: comment,
+     const res = await client.create({
+         _type: 'comment',
          post: {
             _type: "reference",
             _ref: _id
          }, name, email, comment
       })
+      console.log(res);
+
    } catch (err) {
       console.log(err);
       return res.status(500).json({ message: 'Comment could not be submitted'})
    }
-   console.log('comment sent');
   res.status(200).json({ message: 'Comment submitted' })
 }

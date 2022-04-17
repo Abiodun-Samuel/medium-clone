@@ -4,6 +4,7 @@ import { sanityClient, urlFor } from "../../sanity"
 import { Post_One } from "../../typings";
 import PortableText from 'react-portable-text';
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useState } from "react";
 interface Props {
    post:  Post_One;
 }
@@ -15,15 +16,18 @@ interface IFormInput{
 }
 
 export default function Post({ post }: Props) {
+   const [submited, setSubmitted] = useState(false);
    const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>();
    const onSubmit: SubmitHandler<IFormInput> = (data) => {
        fetch(`/api/createComment`, {
          method: "POST",
          body:JSON.stringify(data),
       }).then(() => {
-        console.log(data);
+         console.log(data);
+         setSubmitted(true)
       }).catch((err) => {
-        console.log(err)
+         console.log(err)
+         setSubmitted(false);
      })
    }
 
@@ -63,7 +67,12 @@ export default function Post({ post }: Props) {
 
       <hr className="max-w-lg my-5 mx-auto border border-yellow-500" />
       
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col p-5 max-w-2xl mx-auto mb-10">
+      {submited ?
+         <div className="max-w-3xl mx-auto flex flex-col p-10 my-10 bg-yellow-500 text-white">
+            <h3 className="text-3xl font-bold">Submitted</h3> 
+            <p>Once it has been approved, it will appear below</p>
+         </div>
+         : (<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col p-5 max-w-2xl mx-auto mb-10">
          <h3 className="text-sm text-yellow-500">Enjoyed this article?</h3>
          <h4 className="text-3xl font-bold">Leave a comment below</h4>
          <hr className="py-3 mt-2" />
@@ -82,14 +91,15 @@ export default function Post({ post }: Props) {
             <span className="text-gray-700">Comment</span>
             <textarea   {...register("comment", {required: true})} className="shadow border rounded py-2 px-3 form-textarea mt-1 block w-full ring-yellow-500 outline-none focus:ring" placeholder="Enter your comments" rows={8}/>
          </label>
-         {/* display error  */}
+         {/* display error  */} 
          <div className="flex flex-col p-5">
             {errors.name && (<span className="text-red-500"> Name Field is required</span>)}
             {errors.email && (<span className="text-red-500"> Email Field is required</span>)}
             {errors.comment && (<span className="text-red-500"> Comment Field is required</span>)}
          </div>
             <input type="submit" value="Submit" className="shadow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded cursor-pointer"/>
-      </form>
+      </form>)}
+     
    </main>)
 }
 
