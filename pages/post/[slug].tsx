@@ -10,11 +10,22 @@ interface Props {
 interface IFormInput{
    _id: string;
    name: string;
-   email:
+   email: string;
+   comment: string;
 }
 
 export default function Post({ post }: Props) {
-   const { register, handleSubmit, formState: { errors } } = useForm();
+   const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>();
+   const onSubmit:SubmitHandler<IFormInput> = (data) => {
+       fetch(`/api/createComment`, {
+         method: "POST",
+         body:JSON.stringify(data),
+      }).then(() => {
+        console.log(data);
+      }).catch((err) => {
+        console.log(err)
+     })
+   }
 
 
    return (<main>
@@ -52,7 +63,7 @@ export default function Post({ post }: Props) {
 
       <hr className="max-w-lg my-5 mx-auto border border-yellow-500" />
       
-      <form className="flex flex-col p-5 max-w-2xl mx-auto mb-10">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col p-5 max-w-2xl mx-auto mb-10">
          <h3 className="text-sm text-yellow-500">Enjoyed this article?</h3>
          <h4 className="text-3xl font-bold">Leave a comment below</h4>
          <hr className="py-3 mt-2" />
@@ -61,16 +72,23 @@ export default function Post({ post }: Props) {
 
          <label htmlFor="" className="block mb-5">
             <span className="text-gray-700">Name</span>
-            <input  className="shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring" type="text" placeholder="Enter your name" />
+            <input {...register("name", {required: true})} className="shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring" type="text" placeholder="Enter your name" />
          </label>
          <label htmlFor="" className="block mb-5">
             <span className="text-gray-700">Email</span>
-            <input  className="shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring" type="email" placeholder="Enter your email" />
+            <input  {...register("email", {required: true})}  className="shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring" type="email" placeholder="Enter your email" />
          </label>
          <label htmlFor="" className="block mb-5">
             <span className="text-gray-700">Comment</span>
-            <textarea className="shadow border rounded py-2 px-3 form-textarea mt-1 block w-full ring-yellow-500 outline-none focus:ring" placeholder="Enter your comments" rows={8}/>
+            <textarea   {...register("comment", {required: true})} className="shadow border rounded py-2 px-3 form-textarea mt-1 block w-full ring-yellow-500 outline-none focus:ring" placeholder="Enter your comments" rows={8}/>
          </label>
+         {/* display error  */}
+         <div className="flex flex-col p-5">
+            {errors.name && (<span className="text-red-500"> Name Field is required</span>)}
+            {errors.email && (<span className="text-red-500"> Email Field is required</span>)}
+            {errors.comment && (<span className="text-red-500"> Comment Field is required</span>)}
+         </div>
+            <input type="submit" value="Submit" className="shadow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded cursor-pointer"/>
       </form>
    </main>)
 }
