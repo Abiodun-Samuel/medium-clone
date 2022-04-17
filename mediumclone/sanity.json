@@ -1,10 +1,10 @@
 {
   "root": true,
   "project": {
-    "name": "medium"
+    "name": "mediumClone"
   },
   "api": {
-    "projectId": "9i25pofy",
+    "projectId": "jo2gt0sh",
     "dataset": "production"
   },
   "plugins": [

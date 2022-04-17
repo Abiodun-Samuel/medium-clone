@@ -16,7 +16,7 @@ interface IFormInput{
 
 export default function Post({ post }: Props) {
    const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>();
-   const onSubmit:SubmitHandler<IFormInput> = (data) => {
+   const onSubmit: SubmitHandler<IFormInput> = (data) => {
        fetch(`/api/createComment`, {
          method: "POST",
          body:JSON.stringify(data),

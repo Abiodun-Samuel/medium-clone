@@ -4,15 +4,15 @@ import sanityClient from '@sanity/client';
 
 
 type Data = {
-   name: string,
-   message: string,
-   err: string,
+   message: string
 }
+
 const config = {
    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
    useCdn: process.env.NODE_ENV === 'production',
-   token: process.env.SANITY_API_TOKEN
+   token: process.env.SANITY_API_TOKEN,
+   apiVersion: '2021-10-21',
 }
 
 const client = sanityClient(config);
@@ -31,7 +31,9 @@ export default async function handler(
          }, name, email, comment
       })
    } catch (err) {
+      console.log(err);
       return res.status(500).json({ message: 'Comment could not be submitted'})
    }
-  res.status(200).json({ name: 'John Doe' })
+   console.log('comment sent');
+  res.status(200).json({ message: 'Comment submitted' })
 }
