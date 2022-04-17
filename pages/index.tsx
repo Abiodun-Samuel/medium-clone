@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
+import Footer from '../components/Footer'
 import Header from '../components/Header'
 import { sanityClient, urlFor } from '../sanity'
 import {Post} from '../typings'
@@ -44,6 +45,8 @@ export default function Home({ posts }: Props) {
           </Link>
         ))}
       </div>
+
+      <Footer/>
     </div>
   )
 }
